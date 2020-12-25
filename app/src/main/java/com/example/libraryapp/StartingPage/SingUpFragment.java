@@ -8,18 +8,25 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.libraryapp.R;
 import com.example.libraryapp.Requests.SignUpRequest;
+
+import org.json.JSONObject;
 
 
 public class SingUpFragment extends Fragment {
 
     private EditText Sign_Name, Sign_Surname, Sign_Email, Sign_Password, Sign_Password2;
     private String name, surname, email, password, password2;
+    private int user_role;
     private TextView signUp;
+    private CheckBox is_admin;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,16 +46,14 @@ public class SingUpFragment extends Fragment {
     public void mDefineView(final View view) {
 
 
-
         signUp = view.findViewById(R.id.Sign_signup);
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 SignUpUser(view);
-        }
+            }
 
-    });
+        });
     }
 
     public void SignUpUser(View view) {
@@ -58,12 +63,19 @@ public class SingUpFragment extends Fragment {
         Sign_Email = view.findViewById(R.id.Sign_email);
         Sign_Password = view.findViewById(R.id.Sign_password);
         Sign_Password2 = view.findViewById(R.id.Sign_password2);
+        is_admin = view.findViewById(R.id.is_admin);
 
         name = Sign_Name.getText().toString().trim();
         surname = Sign_Surname.getText().toString().trim();
         email = Sign_Email.getText().toString().trim();
         password = Sign_Password.getText().toString().trim();
         password2 = Sign_Password2.getText().toString().trim();
+
+        if(is_admin.isSelected()){
+            user_role = 1;
+        }else{
+            user_role = 0;
+        }
 
         if (TextUtils.isEmpty(name)) {
             Sign_Name.setError("Please Enter Your Name!");
@@ -96,14 +108,27 @@ public class SingUpFragment extends Fragment {
             return;
         }
 
-            SignUpRequest.SendSignUpRequest(getActivity(), name, surname, email, password);
-            SignUpRequest request = new SignUpRequest();
-            request.setListener(new SignUpRequest.Listener() {
-                @Override
-                public void sendResponse(Object meta) {
+        SignUpRequest.SendSignUpRequest(getActivity(), name, surname, email, password, user_role);
+        SignUpRequest request = new SignUpRequest();
+        request.setListener(new SignUpRequest.Listener() {
+            @Override
+            public void sendResponse(Object meta) {
 
+                try {
+
+                    JSONObject response = (JSONObject) meta;
+                    if (response.getBoolean("result")) {
+                        Toast.makeText(getActivity(), response.getString("message"), Toast.LENGTH_SHORT).show();
+                        getActivity().onBackPressed();
+                    }
+                    Toast.makeText(getActivity(), response.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        }
+            }
+        });
+    }
 
 }

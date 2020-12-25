@@ -2,13 +2,15 @@ package com.example.libraryapp.Requests;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
+import com.example.libraryapp.DTO.Statics;
+import com.example.libraryapp.DTO.Users;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -37,40 +39,36 @@ public class LoginRequest {
             final String Password
     ) {
 
-
         mActivity = activity;
         Map<String, String> params = new HashMap<>();
 
         params.put("Email", Email);
         params.put("Password", Password);
         JSONObject parameters = new JSONObject(params);
-       /* try {
-
-            parameters.put("Email", Email);
-            parameters.put("Password", Password);
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
 
 
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, requestUrls.LoginUrl, new Response.Listener<String>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.LoginUrl, parameters, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(JSONObject response) {
                 try {
-//                    listener.sendResponse(response);
-//                    gDialogHelper.DismissLoadingMessage();
-                    Log.wtf("logined", "" + response.toString());
 
-//                    JSONObject obj = response.getJSONObject("Status");
-//                    String obj = response.getString("message");
-                    Log.wtf("logined", "" + response.toString());
                     Gson gson = new Gson();
+                    Log.wtf("logined", "" + response.toString());
+                    boolean result = response.getBoolean("result");
+                    if (result) {
+//                    gDialogHelper.DismissLoadingMessage();
+                        Log.wtf("logined", "result is true " + response.toString());
 
+                        JSONObject obj = response.getJSONObject("user");
+                        Users logedInUser = gson.fromJson(obj.toString(), Users.class);
+                        Statics.loggedInUser = logedInUser;
 
-//                    JSONArray responseJSONArray = response.getJSONArray("results");
+                    }
+
+                    listener.sendResponse(response);
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
@@ -79,29 +77,22 @@ public class LoginRequest {
 //                gDialogHelper.DismissLoadingMessage();
                 listener.sendResponse(null);
             }
-        }){
+        }) {
 
-           @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("Email", Email);
-                params.put("Password", Password);
+            /*   @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("Email", Email);
+                    params.put("Password", Password);
 
-                return params;
-            }
+                    return params;
+                }*/
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String,String>();
-                 headers.put("Content-Type", "application/json; charset=utf-8");
-//                headers.put("Authorization", "[My SAS Key]");
-//                headers.put("Cache-Control", "no-cache");
-//                headers.put("Content-Type", "application/x-www-form-urlencoded");
+                HashMap<String, String> headers = new HashMap<String, String>();
+
                 return headers;
             }
-//            @Override
-//            public String getBodyContentType() {
-//                return "application/json";
-//            }
 
         };
 

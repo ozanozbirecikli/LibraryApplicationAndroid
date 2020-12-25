@@ -2,7 +2,11 @@ package com.example.libraryapp.StartingPage;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,11 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.libraryapp.R;
 import com.example.libraryapp.Requests.LoginRequest;
 
+import org.json.JSONObject;
+
 public class LoginFragment extends Fragment {
+
+    private NavController navController = null;
 
     private EditText tEmail, tPassword;
     private String email, password;
@@ -23,7 +32,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -35,8 +43,13 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    public void mDefineView(final View view) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+    }
 
+    public void mDefineView(final View view) {
 
         login = view.findViewById(R.id.Login_button);
         login.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +86,22 @@ public class LoginFragment extends Fragment {
         request.setListener(new LoginRequest.Listener() {
             @Override
             public void sendResponse(Object meta) {
+                try {
+                    if (meta != null) {
 
+                        JSONObject tObj = (JSONObject) meta;
+
+                        if (!tObj.getBoolean("result")) {
+                            Toast.makeText(getActivity(), tObj.getString("message"), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), tObj.getString("message"), Toast.LENGTH_SHORT).show();
+                            navController.navigate(R.id.action_loginFragment_to_homeFragment);
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

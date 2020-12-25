@@ -7,10 +7,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.libraryapp.DTO.Items;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,14 +48,17 @@ public class GetAllItems {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-//                    listener.sendResponse(response);
-//                    gDialogHelper.DismissLoadingMessage();
 
-//                    JSONObject obj = response.getJSONObject("Status");
-//                    Gson gson = new Gson();
-                    Log.wtf("logging", response.toString());
+                    if(response.getBoolean("result")) {
 
-//                    JSONArray responseJSONArray = response.getJSONArray("results");
+                        Gson gson = new Gson();
+                        Log.wtf("GetAllItems", response.toString());
+
+                        Type listType = new TypeToken<ArrayList<Items>>(){}.getType();
+                        JSONArray responseJSONArray = response.getJSONArray("objects");
+                        ArrayList<Items> allItems =gson.fromJson(responseJSONArray.toString(), listType);
+                        listener.sendResponse(allItems);
+                    }
 
                 } catch (Exception e) {
 

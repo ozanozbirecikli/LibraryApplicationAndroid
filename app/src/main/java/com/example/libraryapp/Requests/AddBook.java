@@ -1,16 +1,13 @@
 package com.example.libraryapp.Requests;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -18,7 +15,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignUpRequest {
+public class AddBook {
+
 
     public static Activity mActivity;
     private static Listener listener;
@@ -33,33 +31,28 @@ public class SignUpRequest {
         void sendResponse(Object meta);
     }
 
-    public static void SendSignUpRequest(
+    public static void addBook(
             Activity activity,
             String Name,
-            String Surname,
-            String Email,
-            String Password,
-            int User_role
+            String Type,
+            int Year,
+            String Author,
+            int Amount
     ) {
 
         mActivity = activity;
         Map<String, Object> params = new HashMap<>();
         params.put("Name", Name);
-        params.put("Surname", Surname);
-        params.put("Email", Email);
-        params.put("Password", Password);
-        params.put("User_role", User_role);
+        params.put("Type", Type);
+        params.put("Year", Year);
+        params.put("Author", Author);
+        params.put("Amount", Amount);
         final JSONObject parameters = new JSONObject(params);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.SignUpUrl, parameters, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.AddItems, parameters, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-//                    listener.sendResponse(response);
-//                    gDialogHelper.DismissLoadingMessage();
-//                    JSONObject obj = response.getJSONObject("Status");
-                    Gson gson = new Gson();
-                    Log.wtf("Signup", "" + response.toString());
 
                     boolean result = response.getBoolean("result");
                     if (result) {
@@ -68,10 +61,8 @@ public class SignUpRequest {
                         listener.sendResponse(response);
                     }
 
-//                    JSONArray responseJSONArray = response.getJSONArray("results");
-
                 } catch (Exception e) {
-
+                    e.printStackTrace();;
                 }
             }
         }, new Response.ErrorListener() {
@@ -108,4 +99,5 @@ public class SignUpRequest {
         //gDialogHelper.ShowLoadingMessage();
         RequestHandler.getInstance(mActivity).addToRequestQueue(jsonObjectRequest);
     }
+
 }
