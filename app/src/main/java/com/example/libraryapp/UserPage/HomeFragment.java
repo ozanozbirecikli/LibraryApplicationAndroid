@@ -20,7 +20,7 @@ import com.example.libraryapp.R;
 
 public class HomeFragment extends Fragment {
 
-    private Button seeBooks, requestBook, addBook, exit;
+    private Button seeBooks, requestBook, addBook, exit, reservedBook;
     private TextView name, surname, user_type;
 
     private NavController navController = null;
@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment {
         requestBook = view.findViewById(R.id.requestBook);
         addBook = view.findViewById(R.id.addBook);
         exit = view.findViewById(R.id.exit);
+        reservedBook = view.findViewById(R.id.reservedBook);
 
         name = view.findViewById(R.id.home_name);
         surname = view.findViewById(R.id.home_surname);
@@ -93,6 +94,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        reservedBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_homeFragment_to_allReservations);
+
+            }
+        });
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

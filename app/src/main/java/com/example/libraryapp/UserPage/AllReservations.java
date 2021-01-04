@@ -19,23 +19,24 @@ import android.widget.Toast;
 import com.example.libraryapp.DTO.Items;
 import com.example.libraryapp.DTO.Statics;
 import com.example.libraryapp.R;
-import com.example.libraryapp.Requests.AddBook;
 import com.example.libraryapp.Requests.GetAllItems;
+import com.example.libraryapp.Requests.GetAllReservations;
 import com.example.libraryapp.Requests.ReserveItem;
+import com.example.libraryapp.Requests.ReturnItem;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 
-public class SeeBooksFragment extends Fragment {
+public class AllReservations extends Fragment {
 
     private RecyclerView recyclerView;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -43,45 +44,45 @@ public class SeeBooksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_see_books, container, false);
-        mDefineview(view);
+        View view = inflater.inflate(R.layout.fragment_all_reservations, container, false);
+        mDefineView(view);
         return view;
     }
 
-    public void mDefineview(View view) {
+    public void mDefineView(View view){
 
-        recyclerView = view.findViewById(R.id.Items_RecyclerView);
+        recyclerView = view.findViewById(R.id.Reservations_RecyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-        GetAllItems.GetItems(getActivity());
-        GetAllItems allItems = new GetAllItems();
-        allItems.setListener(new GetAllItems.Listener() {
+        GetAllReservations.getAllReservations(getActivity(), Statics.loggedInUser.iD_USERS);
+        GetAllReservations getAllReservations = new GetAllReservations();
+        getAllReservations.setListener(new GetAllReservations.Listener() {
             @Override
             public void sendResponse(Object meta) {
+                ArrayList<Items> Allreservations = (ArrayList<Items>) meta;
 
-                ArrayList<Items> Allitems = (ArrayList<Items>) meta;
-
-                AdapterItemsList adapter = new AdapterItemsList(getActivity(), getContext(), Allitems);
+                AdapterReservationList adapter = new AdapterReservationList(getActivity(), getContext(), Allreservations);
                 recyclerView.setAdapter(adapter);
 
-                Log.wtf("AllItemsFormFragment", " " + Allitems.get(0).name);
-
+                Log.wtf("AllReservationsFromFragment", " " + Allreservations.get(0).name);
             }
         });
+
 
     }
 }
 
-class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.ItemsViewHolder> {
+
+class AdapterReservationList extends RecyclerView.Adapter<AdapterReservationList.ReservationsViewHolder> {
 
     private final LayoutInflater mInflater;
     public ArrayList<Items> mItems = new ArrayList<>();
     private Context mContext;
     private Activity mActivity;
 
-    public AdapterItemsList(Activity activity, Context context, ArrayList<Items> items) {
+    public AdapterReservationList(Activity activity, Context context, ArrayList<Items> items) {
 //        mItems.addAll(items);
         mItems = items;
         mContext = context;
@@ -92,16 +93,16 @@ class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.ItemsViewHo
 
     @NonNull
     @Override
-    public AdapterItemsList.ItemsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterReservationList.ReservationsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v;
         v = mInflater.inflate(R.layout.model_book, parent, false);
 
-        return new ItemsViewHolder(v);
+        return new ReservationsViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(AdapterItemsList.ItemsViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterReservationList.ReservationsViewHolder holder, int position) {
 
         final Items selectedItem = mItems.get(position);
 
@@ -115,14 +116,15 @@ class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.ItemsViewHo
         holder.itemType.setText(selectedItem.type);
         holder.itemYear.setText("Year: " + selectedItem.year);
         holder.itemAmount.setText("Amount: " + selectedItem.amount);
+        holder.reserveButton.setText("Return");
 
         holder.reserveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                ReserveItem.reserveItem(mActivity, Statics.loggedInUser.iD_USERS, selectedItem.id);
-                ReserveItem reserveItem = new ReserveItem();
-                reserveItem.setListener(new ReserveItem.Listener() {
+                ReturnItem.returnItem(mActivity, Statics.loggedInUser.iD_USERS, selectedItem.id);
+                ReturnItem returnItem = new ReturnItem();
+                returnItem.setListener(new ReturnItem.Listener() {
                     @Override
                     public void sendResponse(Object meta) {
                         try {
@@ -132,13 +134,14 @@ class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.ItemsViewHo
                             if (response.getBoolean("result")) {
                                 Toast.makeText(mActivity, response.getString("message"), Toast.LENGTH_SHORT).show();
                                 mActivity.onBackPressed();
+                            }else{
+                                Toast.makeText(mActivity, response.getString("message"), Toast.LENGTH_SHORT).show();
+
                             }
 
                         } catch (Exception e) { e.printStackTrace(); }
-
                     }
                 });
-
 
             }
         });
@@ -151,7 +154,7 @@ class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.ItemsViewHo
     }
 
 
-    static class ItemsViewHolder extends RecyclerView.ViewHolder {
+    static class ReservationsViewHolder extends RecyclerView.ViewHolder {
 
         TextView itemName;
         TextView itemAuthor;
@@ -160,7 +163,7 @@ class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.ItemsViewHo
         TextView itemAmount;
         TextView reserveButton;
 
-        public ItemsViewHolder(View itemView) {
+        public ReservationsViewHolder(View itemView) {
             super(itemView);
 
             itemName = (TextView) itemView.findViewById(R.id.model_name);

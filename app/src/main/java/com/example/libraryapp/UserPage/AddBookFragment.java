@@ -112,7 +112,6 @@ public class AddBookFragment extends Fragment {
                 try {
                     JSONObject response = (JSONObject) meta;
 
-
                     if (response.getBoolean("result")) {
                         Toast.makeText(getActivity(), response.getString("message"), Toast.LENGTH_SHORT).show();
                         getActivity().onBackPressed();
