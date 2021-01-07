@@ -120,7 +120,7 @@ class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.ItemsViewHo
             @Override
             public void onClick(View v) {
 
-                ReserveItem.reserveItem(mActivity, Statics.loggedInUser.iD_USERS, selectedItem.id);
+                ReserveItem.reserveItem(mActivity, Statics.getInstance().loggedInUser.iD_USERS, selectedItem.id);
                 ReserveItem reserveItem = new ReserveItem();
                 reserveItem.setListener(new ReserveItem.Listener() {
                     @Override

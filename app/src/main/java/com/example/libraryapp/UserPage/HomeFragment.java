@@ -20,12 +20,12 @@ import com.example.libraryapp.R;
 
 public class HomeFragment extends Fragment {
 
-    private Button seeBooks, requestBook, addBook, exit, reservedBook;
+    private Button seeBooks, addBook, exit, reservedBook;
     private TextView name, surname, user_type;
 
     private NavController navController = null;
 
-    private Users loggedInUser = Statics.loggedInUser;
+    private Users loggedInUser = Statics.getInstance().loggedInUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,6 @@ public class HomeFragment extends Fragment {
     public void mDefineView(View view) {
 
         seeBooks = view.findViewById(R.id.seeBooks);
-        requestBook = view.findViewById(R.id.requestBook);
         addBook = view.findViewById(R.id.addBook);
         exit = view.findViewById(R.id.exit);
         reservedBook = view.findViewById(R.id.reservedBook);
@@ -65,12 +64,10 @@ public class HomeFragment extends Fragment {
         if (loggedInUser.iD_ROLE == 1) {
             user_type.setText("Library Staff");
             addBook.setVisibility(View.VISIBLE);
-            requestBook.setVisibility(View.GONE);
 
         } else {
             user_type.setText("Standard-User");
             addBook.setVisibility(View.GONE);
-            requestBook.setVisibility(View.VISIBLE);
         }
 
         seeBooks.setOnClickListener(new View.OnClickListener() {
@@ -80,12 +77,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        requestBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_homeFragment_to_requestBookFragment);
-            }
-        });
 
         addBook.setOnClickListener(new View.OnClickListener() {
             @Override

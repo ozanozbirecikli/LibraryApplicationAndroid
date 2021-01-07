@@ -49,7 +49,7 @@ public class GetAllReservations {
 
         final JSONObject parameters = new JSONObject(params);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrls.MyReservedItems+User_Id, parameters, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrls.getInstance().MyReservedItems+User_Id, parameters, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

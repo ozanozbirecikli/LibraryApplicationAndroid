@@ -43,7 +43,7 @@ public class ReserveItem {
         params.put("Item_Id", Item_Id);
         final JSONObject parameters = new JSONObject(params);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.ReserveItem, parameters, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.getInstance().ReserveItem, parameters, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

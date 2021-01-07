@@ -56,7 +56,7 @@ public class AllReservations extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-        GetAllReservations.getAllReservations(getActivity(), Statics.loggedInUser.iD_USERS);
+        GetAllReservations.getAllReservations(getActivity(), Statics.getInstance().loggedInUser.iD_USERS);
         GetAllReservations getAllReservations = new GetAllReservations();
         getAllReservations.setListener(new GetAllReservations.Listener() {
             @Override
@@ -66,7 +66,6 @@ public class AllReservations extends Fragment {
                 AdapterReservationList adapter = new AdapterReservationList(getActivity(), getContext(), Allreservations);
                 recyclerView.setAdapter(adapter);
 
-                Log.wtf("AllReservationsFromFragment", " " + Allreservations.get(0).name);
             }
         });
 
@@ -122,7 +121,7 @@ class AdapterReservationList extends RecyclerView.Adapter<AdapterReservationList
             @Override
             public void onClick(View v) {
 
-                ReturnItem.returnItem(mActivity, Statics.loggedInUser.iD_USERS, selectedItem.id);
+                ReturnItem.returnItem(mActivity, Statics.getInstance().loggedInUser.iD_USERS, selectedItem.id);
                 ReturnItem returnItem = new ReturnItem();
                 returnItem.setListener(new ReturnItem.Listener() {
                     @Override

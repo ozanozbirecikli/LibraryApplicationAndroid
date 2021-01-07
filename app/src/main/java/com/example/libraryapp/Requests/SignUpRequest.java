@@ -51,7 +51,7 @@ public class SignUpRequest {
         params.put("User_role", User_role);
         final JSONObject parameters = new JSONObject(params);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.SignUpUrl, parameters, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.getInstance().SignUpUrl, parameters, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

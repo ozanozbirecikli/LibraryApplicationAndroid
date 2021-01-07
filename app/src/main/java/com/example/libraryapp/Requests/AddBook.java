@@ -49,7 +49,7 @@ public class AddBook {
         params.put("Amount", Amount);
         final JSONObject parameters = new JSONObject(params);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.AddItems, parameters, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.getInstance().AddItems, parameters, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

@@ -47,7 +47,7 @@ public class LoginRequest {
         JSONObject parameters = new JSONObject(params);
 
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.LoginUrl, parameters, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrls.getInstance().LoginUrl, parameters, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -61,7 +61,7 @@ public class LoginRequest {
 
                         JSONObject obj = response.getJSONObject("user");
                         Users logedInUser = gson.fromJson(obj.toString(), Users.class);
-                        Statics.loggedInUser = logedInUser;
+                        Statics.getInstance().loggedInUser = logedInUser;
 
                     }
 

@@ -112,18 +112,6 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/requestBook"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@color/colorPrimary"
-                    android:text="Request Book"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/addBook"

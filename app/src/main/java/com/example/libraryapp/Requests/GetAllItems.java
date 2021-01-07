@@ -22,7 +22,6 @@ import java.util.Map;
 public class GetAllItems {
 
 
-
     public static Activity mActivity;
     private static Listener listener;
     //dialog
@@ -44,7 +43,7 @@ public class GetAllItems {
 
 
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrls.Items, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrls.getInstance().Items, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
